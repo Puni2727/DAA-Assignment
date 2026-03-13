@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class Solution {
+
+    static int minimumLoss(long[] price) {
+        int n = price.length;
+
+        // store price with original index
+        long[][] arr = new long[n][2];
+
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = price[i];
+            arr[i][1] = i;
+        }
+
+        // sort by price
+        Arrays.sort(arr, (a, b) -> Long.compare(a[0], b[0]));
+
+        long minLoss = Long.MAX_VALUE;
+
+        for (int i = 1; i < n; i++) {
+            long higherPrice = arr[i][0];
+            long lowerPrice = arr[i - 1][0];
+
+            int higherIndex = (int) arr[i][1];
+            int lowerIndex = (int) arr[i - 1][1];
+
+            // buy first, sell later
+            if (higherIndex < lowerIndex) {
+                minLoss = Math.min(minLoss, higherPrice - lowerPrice);
+            }
+        }
+
+        return (int) minLoss;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        long[] price = new long[n];
+
+        for (int i = 0; i < n; i++) {
+            price[i] = sc.nextLong();
+        }
+
+        System.out.println(minimumLoss(price));
+    }
+}
